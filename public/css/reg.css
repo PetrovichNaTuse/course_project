@@ -1,0 +1,78 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    background-color: #333;
+}
+.wrapper {
+    position: relative;
+    width: 600px;
+    margin: 0 auto;
+    margin-top: 30px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 3px 3px 20px black;
+}
+h1 {
+    color: gray;
+    text-align: center;
+    font-size: 45px;
+    text-shadow: -1px -1px 4px gray;
+}
+input, button {
+    outline: none;
+}
+label {
+    position: relative;
+    display: block;
+    margin: 30px auto;
+    padding-top: 10px;
+    width: 70%;
+}
+input {
+    position: absolute;
+    width: 300px;
+    height: 30px;
+    right: 0;
+    margin-top: -10px;
+    padding-left: 15px;
+    border-radius: 10px;
+}
+span {
+    position: absolute;
+    bottom: -22px;
+    right: 30%;
+    color: gray;
+}
+button {
+    margin: 20px;
+    padding: 15px 25px;
+    border-radius: 15px;
+    box-shadow: 1px 1px 4px #bbb;
+    box-shadow: -1px -1px 4px #bbb;
+    cursor: pointer;
+}
+button:active {
+    margin: 22px;
+    box-shadow: none;
+    padding: 13px 23px;
+}
+.incorrect-input {
+    border: 2px solid red;
+}
+.incorrect-input::after {
+    content: '+';
+    font-weight: 900;
+    margin-left: -30px;
+    color: red;
+    transform: rotate(45deg);
+    transform: scale(4);
+}
+.info-block {
+    position: absolute;
+    display: none;
+    top: 440px;
+    left: 45%;
+    color: green;
+}

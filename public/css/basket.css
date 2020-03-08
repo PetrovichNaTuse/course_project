@@ -1,0 +1,229 @@
+.main-basket h2 {
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+.shopping-cart {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: 15px;
+    font-family: Arial;
+}
+.shopping-cart__detail {
+    display: none;
+}
+.cart-summary {
+    display: flex;
+    flex-flow: column nowrap;
+}
+.cart-footer {
+    order: 1;
+}
+.cart-footer__wrapper {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-end;
+}
+.cart-footer__item {
+    display: flex;
+    width: 276px;
+}
+.cost-product, .cost-shipping, .cost {
+}
+.cart-footer span {
+    border: 1px solid gray;
+    border-top: none;
+    flex: 1 1 50px;
+    padding: 10px;
+    font-size: 14px;
+}
+.total, .cost {
+    font-weight: bold;
+    font-size: 20px !important;
+}
+.cart-footer span:not(:last-child) {
+    border-right: none;
+}
+
+.order-step, .cart-header__wrapper, .cart-product__wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+}
+.cart-header__wrapper {
+    background-color: #f4f4f4;
+}
+
+.order-step__item {
+    font: bold 18px serif;
+    flex: 1 1 200px;
+    padding: 15px;
+    background-color: #ededed;
+    border: 1px solid #c7c7c7;
+    margin-bottom: 30px;
+}
+.order-step__item_complete {
+    background-color: #2b292d;
+    border-color: #000;
+    color: white;
+}
+
+.cart-header__item, .cart-product__item {
+    flex: 1 1 150px;
+    border: 1px solid gray;
+    padding: 10px;
+}
+
+.cart-product__item {
+    display: flex;
+    font-size: 17px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.cart-header__item {
+    border-bottom: none;
+    font: bold 13px sans-serif;
+}
+.cart-header__item:not(:last-child), .cart-product__item:not(:last-child) {
+    border-right: none;
+}
+.cart-product__wrapper:not(:first-child) .cart-product__item {
+    border-top: none;
+}
+.cart-header__item:nth-child(2), .cart-product__item:nth-child(2) {
+    flex: 5 1 40%;
+}
+.cart-product__description {
+    font-weight: bold;
+}
+.cart-product__del::after {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    content: "";
+}
+.cart-product__price {
+    flex-flow: column nowrap;
+}
+.new-price {
+    color: var(--pink-color);
+}
+.percent-price {
+    padding: 5px 10px;
+    color: white;
+    background-color: var(--pink-color);
+}
+.old-price {
+    color: gray;
+    text-decoration: line-through;
+}
+.cart-product__del {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1.5em;
+    color: gray;
+}
+.cart-product__del i:hover {
+    color: black;
+    cursor: pointer;
+}
+.cart-product__qty {
+    flex-flow: column nowrap;
+}
+.cart-product__qty div {
+    margin-top: 10px;
+}
+.cart-product__qty button {
+    font-size: 1.5em;
+    color: gray;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: .3s;
+}
+.cart-product__qty button:hover {
+    color: black;
+}
+
+.shopping-cart__detail-navigate {
+    position: relative;
+    margin-top: 30px;
+}
+.shopping-cart__detail-navigate a {
+    position: absolute;
+    border: none;
+    padding: 10px;
+    color: white;
+    background-color: #2b292d;
+    cursor: pointer;
+    transition: .3s;
+}
+.shopping-cart__detail-navigate a:hover {
+    background-color: var(--pink-color);
+}
+.shopping-cart__checkout {
+    right: 0;
+}
+
+.alert-warning {
+    display: none;
+    font-weight: bold;
+    font-size: 14px;
+    width: 100%;
+    padding: 20px 10px;
+    margin-top: 30px;
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border: 1px solid #faebcc;
+}
+
+
+.shopping-cart__address {
+    display: none;
+}
+.shopping-cart__address label {
+    font-size: 18px;
+}
+.shopping-cart__address input {
+    width: 300px;
+    height: 40px;
+    padding: 10px 5px;
+}
+
+.shopping-cart__delivery {
+    display: none;
+}
+
+
+
+/* Подстилка */
+.check-list__toggle span {
+    display: block;
+    font: bold 13px sans-serif;
+    padding: 10px 15px;
+    color: white
+    text-transform: none;
+    cursor: pointer;
+    transition: .3s;
+}
+.check-list__toggle span:hover {
+    background-color: var(--pink-color);
+}
+.check-list__toggle span:not(:nth-child(6)) {
+    border-bottom: 1px solid gray;
+}
+
+.feedback-login__goout {
+    margin-left: 200px;
+    margin-top: 15px;
+    border: none;
+    padding: 10px 15px;
+    background-color: #2b292d;
+    color: white;
+    cursor: pointer;
+    transition: .3s;
+}
+.feedback-login__goout:hover {
+    background-color: var(--pink-color);
+}
+

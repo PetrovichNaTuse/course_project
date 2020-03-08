@@ -1,0 +1,57 @@
+doctype html
+
+html
+    head
+        meta(charset="utf-8")
+        title #{title}
+        link(rel="stylesheet" href="./css/reset.css")
+        link(rel="stylesheet" href="./css/admin.css")
+    body
+        .wrapper
+            h1 Admin!!!
+            nav.clearfix
+                ul.select-menu
+                    li.item(data-block="user-block") Пользователи
+                    li.item(data-block="product-block") Товар
+                    li.item(data-block="notice-block") Уведомления
+
+            .modify-block
+                ul.user-block.modify-blok__item
+                    
+                .product-block.modify-block__item
+                    h2(data-switch="product-block__add-product") Добавление нового товара
+                    .product-block__add-product
+
+                        form#add-product(action="/addproduct" method="POST" name="addproduct" enctype="multipart/form-data")
+                            label.form-item#add-product__name Наименование товара:
+                                input(type="text" name="name" required)
+                            label.form-item#add-product__category Наименование категории товара:
+                                input(type="text" name="category" required)
+                            label.form-item#add-product__path-images Главное изображение:
+                                input(type="file" name="fgimg" accept=".png, .jpg, .jpeg" required)
+                            //label.form-item#add-product__path-imagesDop Дополнительное изображение:
+                            //    input(type="file" name="bgimg" accept=".png, .jpg, .jpeg")
+                            label.form-item#add-product__cena Цена товара:
+                                input(type="number" name="cena" required)
+                            label.form-item#add-product__sale Процент скидки:
+                                input(type="number" name="sale")
+                            label.form-item#add-product__description Описание товара:
+                                textarea(rows="10" cols="80" maxlength="300" name="description")
+                            .wrapper-button
+                                button(type="submit" name="btnAddTovar") Добавить товар
+                                button(type="reset") Сбросить поля
+
+                    h2(data-switch="product-block__list") Список товаров
+                    ul.product-block__list
+                        each val, index in products
+                            li.list-item
+                                form.list-item__form(action="" name="editForm")
+                                    label= index + '. ' + val.name + ' '
+                                    label= val.category + ' '
+                                    label= val.cena + ' '
+                                    button(type="submit" name="productEdit") Edit
+                                    button(type="submit" name="productDelete") Delete
+
+                ul.notice-block.modify-block__item
+        
+        script(src="./js/admin.js")

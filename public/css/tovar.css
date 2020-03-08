@@ -1,0 +1,13 @@
+.catalog-name {
+    font-size: 25px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+.shop-top__tovar:not(:first-child) {
+    position: static;
+    margin-top: 30px;
+}
+.shop-top__tovar-item {
+    margin-bottom: 20px;
+    max-width: 300px;
+}

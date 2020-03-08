@@ -1,0 +1,25 @@
+app.post('/getUserBasket', (req, res) => {
+    let userProducts = [];
+    let interval;
+
+    req.body.forEach(item => {
+        db.get().collection('products').findOne( {_id: ObjectID(item)}, (err, prod) => {
+            if(err) {
+                console.log(err);
+                return res.sendStatus(500);
+            }
+            userProducts.push(prod);
+        });
+    });
+
+    interval = setInterval(() => {
+        if(userProducts.length !== req.body.length) console.log('upload');
+        else {
+            clearInterval(interval)
+            res.status(200);
+            return res.send(userProducts);
+        }
+    }, 10);
+
+    //});
+})
