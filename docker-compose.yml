@@ -2,16 +2,34 @@ version: "2.0"
 
 services:
 
-  server:
-    build: server/
-    command: ../npm install
-    command: node server.js
-    ports:
-      - 3076:3076
+  # app:
+  #   build: .
+  #   container_name: app
+  #   volumes:
+  #     - app:/app
 
-  db:
-    build: db/
-    command: mongod --dbpath dataDB --port 1234
-    ports:
-      - 1234:1234
+  # db:
+  #   build: db/
+  #   container_name: app_bd
+  #   volumes:
+  #     - app:/db
 
+  # server:
+  #   build: server/
+  #   container_name: app_server
+  #   ports:
+  #     - 3076:3076
+  #   volumes:
+  #     - app:/server
+  #   depends_on:
+  #     - db
+
+    db:
+      image: mongo:3.2
+      container_name: app_bd
+      volumes:
+        - ./db/dataDB:/app/db/dataDB
+      working_dir: /app/db
+      command: mongod --dbpath=dataDB --port=1234
+  # volumes:
+  #   app:

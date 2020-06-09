@@ -1,11 +1,11 @@
 const path = require('path');
 const fs = require('fs');
-const mime = require('../mime');
-const express = require('../express');
+const mime = require('mime');
+const express = require('express');
 const app = express();
-const bodyParser = require('../body-parser');
+const bodyParser = require('body-parser');
 const db = require('../db/db');
-const ObjectID = require('../mongodb').ObjectId;
+const ObjectID = require('mongodb').ObjectId;
 //const userControllers = require('./controllers/user');
 
 app.set('views', path.join(__dirname, '../views'));
