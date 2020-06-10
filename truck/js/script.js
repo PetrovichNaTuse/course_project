@@ -34,6 +34,11 @@ const camera = new THREE.PerspectiveCamera(30, W / H, 1, 10000);
 // camera.position.set(1000, 50, 1500);
 camera.position.set(0, 0, 1000);
 const scene = new THREE.Scene();
+
+// temp rotation
+// scene.rotation.y = 1.6445999999999907;
+// scene.rotation.z = 0.07069999999999989;
+
 scene.add(new THREE.AmbientLight(0x666666));
 
 const poleGeo = new THREE.BoxBufferGeometry(5, 375, 5);
@@ -77,6 +82,37 @@ poleStand2.receiveShadow = true;
 poleStand2.castShadow = true;
 scene.add(poleStand2);
 
+const getWarehouseBox = () => {
+    let linePositionX = -290;
+    let shelfPositionY = -170;
+    for (let i = 0; i < 5; i++) {
+        const lineForward = new THREE.Mesh(new THREE.BoxBufferGeometry(2, 350, 2), poleMat);
+        const lineBackward = new THREE.Mesh(new THREE.BoxBufferGeometry(2, 350, 2), poleMat);
+
+        lineForward.position.x = lineBackward.position.x = linePositionX;
+        lineForward.position.y = lineBackward.position.y = 0;
+        lineForward.position.z = -15, lineBackward.position.z = -75;
+        lineForward.receiveShadow = lineBackward.receiveShadow = true;
+        lineForward.castShadow = lineBackward.castShadow = true;
+        scene.add(lineForward);
+        scene.add(lineBackward);
+
+        linePositionX += 145;
+    }
+
+    for (let i = 0; i < 7; i++) {
+        const shelf = new THREE.Mesh(new THREE.BoxBufferGeometry(600, 2, 60), poleMat)
+
+        shelf.position.y = shelfPositionY;
+        shelf.position.z = -45;
+        scene.add(shelf);
+
+        shelfPositionY += 50;
+    }
+};
+
+getWarehouseBox();
+
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(W, H);
@@ -98,8 +134,8 @@ function animate() {
 
 
 const rotationScene = event => {
-    paramSettings.scene.rotationX += event.movementX * 0.0001;
-    paramSettings.scene.rotationY += event.movementY * 0.0001;
+    paramSettings.scene.rotationX += event.movementY * 0.0001;
+    paramSettings.scene.rotationY += event.movementX * 0.0001;
 };
 
 document.addEventListener('mousedown', event => {
