@@ -38,9 +38,9 @@ camera.position.set(0, 0, 1000);
 const scene = new THREE.Scene();
 
 // temp rotation
-scene.rotation.y = -0.7464999999999921;
-scene.rotation.z = -0.09929999999999703;
-scene.position.z = -296.50000000000125;
+// scene.rotation.y = -0.7464999999999921;
+// scene.rotation.z = -0.09929999999999703;
+// scene.position.z = -296.50000000000125;
 
 scene.add(new THREE.AmbientLight(0x666666));
 
@@ -127,10 +127,42 @@ const getWarehouseBox = () => {
 
 getWarehouseBox();
 
-let mixer;
+let mixer, box;
 
+// пока устанавливается фиксированное время, но надо рассчитывать исходя из row and column
 const goAction = (row, column) => {
+    const getBox = () => {
+        // temp in global scope
+        // const box = new THREE.Mesh(new THREE.BoxBufferGeometry(50, 50, 50), poleMat);
+        box = new THREE.Mesh(new THREE.BoxBufferGeometry(40, 40, 40), poleMat);
+        box.position.x = 270;
+        box.position.y = -144;
+        box.position.z = 35;
+        box.receiveShadow = true;
+        box.castShadow = true;
+
+        return box;
+    };
+
+    const getAndDletedBox = () => {
+        const box = getBox();
+        poleGroup.add(box);
+
+        setTimeout(() => {
+            poleGroup.remove(box);
+            // тут проблемка, так как координты группы элементов начинаются с нуля где они были спозиционированы
+            // а координаты элемента на центре настоящх координат
+            box.position.x = -30;
+            box.position.y = 150;
+            box.position.z = -40;
+            scene.add(box);
+        }, 1500);
+    };
+
     if (mixer && mixer._actions.some(action => action.isRunning())) return;
+
+    getAndDletedBox();
+
     const track = new THREE.NumberKeyframeTrack( '.position[y]', [ 0, 1, 2, 3 ], [0, 300, 300, 0] );
     const clip = new THREE.AnimationClip('Clip', 3, [track]);
 
