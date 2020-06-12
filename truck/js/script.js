@@ -155,9 +155,9 @@ const handlerAnimation = (() => {
     };
 })(); */
 
-const track = new THREE.NumberKeyframeTrack( '.position[y]', [ 0, 2 ], [-185, 100] );
+const track = new THREE.NumberKeyframeTrack( '.position[y]', [ 0, 2 ], [0, 300] );
 const clip = new THREE.AnimationClip('Clip', 3, [track]);
-const mixer = new THREE.AnimationMixer(poleBottom);
+const mixer = new THREE.AnimationMixer(moveGroup);
 const action = mixer.clipAction(clip);
 action.play();
 // test
