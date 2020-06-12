@@ -22,6 +22,8 @@ const paramSettings = {
     }
 };
 
+const clock = new THREE.Clock();
+
 const gui = new dat.GUI();
 gui.add(paramSettings.scene, 'positionX').min(-5).max(5).step(0.1);
 gui.add(paramSettings.scene, 'positionY').min(-5).max(5).step(0.1);
@@ -62,14 +64,14 @@ scene.add(poleRight);
 
 const poleBottom = new THREE.Mesh(new THREE.BoxBufferGeometry(600, 5, 5), poleMat);
 poleBottom.position.x = 0;
-poleBottom.position.y = -185;
+poleBottom.position.y = -170;
 poleBottom.receiveShadow = true;
 poleBottom.castShadow = true;
 // scene.add(poleBottom);
 
 const poleStand1 = new THREE.Mesh(new THREE.BoxBufferGeometry(5, 5, 90), poleMat);
 poleStand1.position.x = 250;
-poleStand1.position.y = -180;
+poleStand1.position.y = -166;
 poleStand1.position.z = 35;
 poleStand1.receiveShadow = true;
 poleStand1.castShadow = true;
@@ -77,7 +79,7 @@ poleStand1.castShadow = true;
 
 const poleStand2 = new THREE.Mesh(new THREE.BoxBufferGeometry(5, 5, 90), poleMat);
 poleStand2.position.x = 290;
-poleStand2.position.y = -180;
+poleStand2.position.y = -166;
 poleStand2.position.z = 35;
 poleStand2.receiveShadow = true;
 poleStand2.castShadow = true;
@@ -124,46 +126,27 @@ const getWarehouseBox = () => {
 
 getWarehouseBox();
 
-
-/* let animation = false,
-    row = 0,
-    column = 0;
-
-const handlerAnimation = (() => {
-    let x = 0,
-        y = 0,
-        z = 0,
-        a = 0,
-        b = 0,
-        time = x,
-        fraction = 0;
-        
-    return () => {
-        fraction = Math.min(row, column) / Math.max(row, column);
-        a = row * 45;
-        b = column * 40;
-
-        y += a / (60 * time);
-        x -= b / (60 * time);
-
-        if (animation && x <= b && y >= a) row = 0, column = 0;
-
-        console.log(x);
-        console.log(y);
-        poleGroup.translateX(x);
-        moveGroup.translateY(y);
-    };
-})(); */
-
-const track = new THREE.NumberKeyframeTrack( '.position[y]', [ 0, 2 ], [0, 300] );
+const track = new THREE.NumberKeyframeTrack( '.position[y]', [ 0, 1, 2, 3 ], [0, 300, 300, 0] );
 const clip = new THREE.AnimationClip('Clip', 3, [track]);
+
+const track1 = new THREE.NumberKeyframeTrack( '.position[x]', [ 0, 1, 2, 3 ], [0, -300, -300, 0] );
+const clip1 = new THREE.AnimationClip('Clip1', 3, [track1]);
+
+const track2 = new THREE.NumberKeyframeTrack( '.position[z]', [ 1, 1.5, 2 ], [0, -70, 0] );
+const clip2 = new THREE.AnimationClip('Clip1', 3, [track2]);
+
 const mixer = new THREE.AnimationMixer(moveGroup);
 const action = mixer.clipAction(clip);
+const action1 = mixer.clipAction(clip1, poleGroup);
+const action2 = mixer.clipAction(clip2, poleGroup);
+action.repetitions = 1;
+action1.repetitions = 1;
+action2.repetitions = 1;
 action.play();
+action1.play();
+action2.play();
 // test
 document.body.onclick = event => { row = 3, column = 6 };
-
-
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(W, H);
@@ -177,17 +160,9 @@ function init() {
 }
 function animate() {
     requestAnimationFrame(animate);
-    
-    // if (row && column) animation = true;
-    // else animation = false;
-
-    // animation && handlerAnimation();
 
     render();
 }
-
-
-
 
 const rotationScene = event => {
     paramSettings.scene.rotationX += event.movementY * 0.0001;
@@ -198,10 +173,6 @@ document.addEventListener('mousedown', event => {
     document.addEventListener('mousemove', rotationScene)
 });
 
-// TODO: на прокрутку настроить бы
-document.addEventListener('mousewheel', event => {
-    // console.log(event.deltaY);
-});
 document.addEventListener('mouseup', event => {
     paramSettings.scene.rotationX = 0;
     paramSettings.scene.rotationY = 0;
@@ -217,9 +188,10 @@ function render() {
     scene.rotation.y += paramSettings.scene.rotationY;
     scene.rotation.z += paramSettings.scene.rotationZ;
     
+    const delta = clock.getDelta();
 
     if ( mixer ) {
-        mixer.update( 0.01 );
+        mixer.update( delta );
     }
 
     renderer.render(scene, camera);
