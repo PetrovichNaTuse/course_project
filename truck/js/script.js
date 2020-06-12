@@ -44,6 +44,7 @@ scene.add(new THREE.AmbientLight(0x666666));
 const poleGeo = new THREE.BoxBufferGeometry(5, 375, 5);
 const poleMat = new THREE.MeshLambertMaterial();
 
+
 const poleLeft = new THREE.Mesh(poleGeo, poleMat);
 poleLeft.position.x = -300;
 poleLeft.position.y = 0;
@@ -124,12 +125,7 @@ const getWarehouseBox = () => {
 getWarehouseBox();
 
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(W, H);
-container.appendChild(renderer.domElement);
-
-
-let animation = false,
+/* let animation = false,
     row = 0,
     column = 0;
 
@@ -157,11 +153,21 @@ const handlerAnimation = (() => {
         poleGroup.translateX(x);
         moveGroup.translateY(y);
     };
-})();
+})(); */
 
-
+const track = new THREE.NumberKeyframeTrack( '.position[y]', [ 0, 2 ], [-185, 100] );
+const clip = new THREE.AnimationClip('Clip', 3, [track]);
+const mixer = new THREE.AnimationMixer(poleBottom);
+const action = mixer.clipAction(clip);
+action.play();
 // test
 document.body.onclick = event => { row = 3, column = 6 };
+
+
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(W, H);
+container.appendChild(renderer.domElement);
 
 init();
 animate();
@@ -175,7 +181,7 @@ function animate() {
     // if (row && column) animation = true;
     // else animation = false;
 
-    animation && handlerAnimation();
+    // animation && handlerAnimation();
 
     render();
 }
@@ -211,6 +217,10 @@ function render() {
     scene.rotation.y += paramSettings.scene.rotationY;
     scene.rotation.z += paramSettings.scene.rotationZ;
     
+
+    if ( mixer ) {
+        mixer.update( 0.01 );
+    }
 
     renderer.render(scene, camera);
 }
