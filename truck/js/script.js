@@ -64,23 +64,33 @@ poleBottom.position.x = 0;
 poleBottom.position.y = -185;
 poleBottom.receiveShadow = true;
 poleBottom.castShadow = true;
-scene.add(poleBottom);
+// scene.add(poleBottom);
 
-const poleStand1 = new THREE.Mesh(new THREE.BoxBufferGeometry(5, 5, 60), poleMat);
+const poleStand1 = new THREE.Mesh(new THREE.BoxBufferGeometry(5, 5, 90), poleMat);
 poleStand1.position.x = 250;
 poleStand1.position.y = -180;
-poleStand1.position.z = 26;
+poleStand1.position.z = 35;
 poleStand1.receiveShadow = true;
 poleStand1.castShadow = true;
-scene.add(poleStand1);
+// scene.add(poleStand1);
 
-const poleStand2 = new THREE.Mesh(new THREE.BoxBufferGeometry(5, 5, 60), poleMat);
+const poleStand2 = new THREE.Mesh(new THREE.BoxBufferGeometry(5, 5, 90), poleMat);
 poleStand2.position.x = 290;
 poleStand2.position.y = -180;
-poleStand2.position.z = 26;
+poleStand2.position.z = 35;
 poleStand2.receiveShadow = true;
 poleStand2.castShadow = true;
-scene.add(poleStand2);
+// scene.add(poleStand2);
+
+const poleGroup = new THREE.Group();
+poleGroup.add(poleStand1);
+poleGroup.add(poleStand2);
+// scene.add(poleGroup);
+
+const moveGroup = new THREE.Group();
+moveGroup.add(poleBottom);
+moveGroup.add(poleGroup);
+scene.add(moveGroup);
 
 const getWarehouseBox = () => {
     let linePositionX = -290;
@@ -118,15 +128,55 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(W, H);
 container.appendChild(renderer.domElement);
 
+
+let animation = false,
+    row = 0,
+    column = 0;
+
+const handlerAnimation = (() => {
+    let x = 0,
+        y = 0,
+        z = 0,
+        a = 0,
+        b = 0,
+        time = x,
+        fraction = 0;
+        
+    return () => {
+        fraction = Math.min(row, column) / Math.max(row, column);
+        a = row * 45;
+        b = column * 40;
+
+        y += a / (60 * time);
+        x -= b / (60 * time);
+
+        if (animation && x <= b && y >= a) row = 0, column = 0;
+
+        console.log(x);
+        console.log(y);
+        poleGroup.translateX(x);
+        moveGroup.translateY(y);
+    };
+})();
+
+
+// test
+document.body.onclick = event => { row = 3, column = 6 };
+
 init();
 animate();
 
 function init() {
 
 }
-
 function animate() {
     requestAnimationFrame(animate);
+    
+    // if (row && column) animation = true;
+    // else animation = false;
+
+    animation && handlerAnimation();
+
     render();
 }
 
