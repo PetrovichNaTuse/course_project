@@ -38,13 +38,14 @@ camera.position.set(0, 0, 1000);
 const scene = new THREE.Scene();
 
 // temp rotation
-// scene.rotation.y = 1.6445999999999907;
-// scene.rotation.z = 0.07069999999999989;
+scene.rotation.y = -0.7464999999999921;
+scene.rotation.z = -0.09929999999999703;
+scene.position.z = -296.50000000000125;
 
 scene.add(new THREE.AmbientLight(0x666666));
 
 const poleGeo = new THREE.BoxBufferGeometry(5, 375, 5);
-const poleMat = new THREE.MeshLambertMaterial();
+const poleMat = new THREE.MeshNormalMaterial({ wareframe: true });
 
 
 const poleLeft = new THREE.Mesh(poleGeo, poleMat);
@@ -126,27 +127,32 @@ const getWarehouseBox = () => {
 
 getWarehouseBox();
 
-const track = new THREE.NumberKeyframeTrack( '.position[y]', [ 0, 1, 2, 3 ], [0, 300, 300, 0] );
-const clip = new THREE.AnimationClip('Clip', 3, [track]);
+let mixer;
 
-const track1 = new THREE.NumberKeyframeTrack( '.position[x]', [ 0, 1, 2, 3 ], [0, -300, -300, 0] );
-const clip1 = new THREE.AnimationClip('Clip1', 3, [track1]);
+const goAction = (row, column) => {
+    if (mixer && mixer._actions.some(action => action.isRunning())) return;
+    const track = new THREE.NumberKeyframeTrack( '.position[y]', [ 0, 1, 2, 3 ], [0, 300, 300, 0] );
+    const clip = new THREE.AnimationClip('Clip', 3, [track]);
 
-const track2 = new THREE.NumberKeyframeTrack( '.position[z]', [ 1, 1.5, 2 ], [0, -70, 0] );
-const clip2 = new THREE.AnimationClip('Clip1', 3, [track2]);
+    const track1 = new THREE.NumberKeyframeTrack( '.position[x]', [ 0, 1, 2, 3 ], [0, -300, -300, 0] );
+    const clip1 = new THREE.AnimationClip('Clip1', 3, [track1]);
 
-const mixer = new THREE.AnimationMixer(moveGroup);
-const action = mixer.clipAction(clip);
-const action1 = mixer.clipAction(clip1, poleGroup);
-const action2 = mixer.clipAction(clip2, poleGroup);
-action.repetitions = 1;
-action1.repetitions = 1;
-action2.repetitions = 1;
-action.play();
-action1.play();
-action2.play();
+    const track2 = new THREE.NumberKeyframeTrack( '.position[z]', [ 1, 1.5, 2 ], [0, -70, 0] );
+    const clip2 = new THREE.AnimationClip('Clip1', 3, [track2]);
+
+    mixer = new THREE.AnimationMixer(moveGroup);
+    const action = mixer.clipAction(clip);
+    const action1 = mixer.clipAction(clip1, poleGroup);
+    const action2 = mixer.clipAction(clip2, poleGroup);
+    action.repetitions = 1;
+    action1.repetitions = 1;
+    action2.repetitions = 1;
+    action.play();
+    action1.play();
+    action2.play();
+};
 // test
-document.body.onclick = event => { row = 3, column = 6 };
+document.body.onclick = event => goAction(3, 5);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(W, H);
