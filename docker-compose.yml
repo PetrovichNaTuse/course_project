@@ -31,5 +31,6 @@ services:
         - ./db/dataDB:/app/db/dataDB
       working_dir: /app/db
       command: mongod --dbpath=dataDB --port=1234
-  # volumes:
-  #   app:
+
+volumes:
+  app:

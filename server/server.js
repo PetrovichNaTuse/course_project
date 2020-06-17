@@ -3,6 +3,7 @@ const fs = require('fs');
 const mime = require('mime');
 const express = require('express');
 const app = express();
+const io = require('socket.io')();
 const bodyParser = require('body-parser');
 const db = require('../db/db');
 const ObjectID = require('mongodb').ObjectId;
@@ -22,6 +23,7 @@ app.get('/reg', (req, res) => {
 });
 
 app.get('/admin', (req, res) => {
+    // db.get().collection('products').deleteMany({});
     db.get().collection('admin').findOne({login: req.query.login}, (err, admin) => {
         if(err) {
             console.log(err);
@@ -57,7 +59,7 @@ app.post('/uploadimg', (req, res) => {
     const fileMime = mime.getExtension(req.headers['content-type']);
     
     console.log(req.headers)
-    let filePath = path.join(__dirname, 'public/img/products')
+    let filePath = path.join(__dirname, '../public/img/products')
 
     const listDir = fs.readdirSync(filePath);
     fs.mkdirSync(path.join(filePath, listDir.length + 1 + ''));
@@ -243,12 +245,15 @@ app.post('/getUserBasket', (req, res) => {
 
 // Добавление товара в корзину пользователя
 app.post('/userBasket', (req, res) => {
-    console.log(req.body);
     db.get().collection('users').updateOne({ '_id': ObjectID(req.body._id) }, { $set: { 'basket': req.body.basket } });
 
     res.status(200);
     res.end('ok');
 })
+
+// start amination
+app.get('/movebox', (req, res) => {
+});
 
 db.connect('mongodb://localhost:1234/', (err) => {
     if(err) return console.log(err);

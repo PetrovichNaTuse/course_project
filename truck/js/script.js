@@ -68,7 +68,6 @@ poleBottom.position.x = 0;
 poleBottom.position.y = -170;
 poleBottom.receiveShadow = true;
 poleBottom.castShadow = true;
-// scene.add(poleBottom);
 
 const poleStand1 = new THREE.Mesh(new THREE.BoxBufferGeometry(5, 5, 90), poleMat);
 poleStand1.position.x = 250;
@@ -76,7 +75,6 @@ poleStand1.position.y = -166;
 poleStand1.position.z = 35;
 poleStand1.receiveShadow = true;
 poleStand1.castShadow = true;
-// scene.add(poleStand1);
 
 const poleStand2 = new THREE.Mesh(new THREE.BoxBufferGeometry(5, 5, 90), poleMat);
 poleStand2.position.x = 290;
@@ -84,12 +82,10 @@ poleStand2.position.y = -166;
 poleStand2.position.z = 35;
 poleStand2.receiveShadow = true;
 poleStand2.castShadow = true;
-// scene.add(poleStand2);
 
 const poleGroup = new THREE.Group();
 poleGroup.add(poleStand1);
 poleGroup.add(poleStand2);
-// scene.add(poleGroup);
 
 const moveGroup = new THREE.Group();
 moveGroup.add(poleBottom);

@@ -1,3 +1,13 @@
+const socket = io('http://localhost:3076');
+console.log(socket);
+
+
+document.onclick = async event => {
+    const response = await fetch('/movebox');
+    console.log(response);
+};
+
+
 document.querySelector('.select-menu').onclick = function(event) {
     const targ = event.target;
 
