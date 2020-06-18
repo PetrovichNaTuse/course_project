@@ -3,7 +3,8 @@ const fs = require('fs');
 const mime = require('mime');
 const express = require('express');
 const app = express();
-const io = require('socket.io')();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 const bodyParser = require('body-parser');
 const db = require('../db/db');
 const ObjectID = require('mongodb').ObjectId;
@@ -17,6 +18,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, '../public')))
 
+// отдаём модель склада
+app.get('/truck', (req, res) => {
+    res.sendFile('truck/index.html');
+});
+
+app.get('/reg', (req, res) => {
+    //console.log(req.body);
+    res.render('registration', { title: 'Registration', text_h1: 'Registration' });
+});
 app.get('/reg', (req, res) => {
     //console.log(req.body);
     res.render('registration', { title: 'Registration', text_h1: 'Registration' });
@@ -255,10 +265,10 @@ app.post('/userBasket', (req, res) => {
 app.get('/movebox', (req, res) => {
 });
 
-// db.connect('mongodb://localhost:1234/', (err) => {
-//     if(err) return console.log(err);
-//     //db = client.db('car_auto');
+db.connect('mongodb://localhost:1234/', (err) => {
+    if(err) return console.log(err);
+    //db = client.db('car_auto');
     app.listen(3076, () => {
         console.log('server started on port 3076');
     });
-// });
+});
