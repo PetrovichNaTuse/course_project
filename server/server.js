@@ -255,10 +255,10 @@ app.post('/userBasket', (req, res) => {
 app.get('/movebox', (req, res) => {
 });
 
-db.connect('mongodb://localhost:1234/', (err) => {
-    if(err) return console.log(err);
-    //db = client.db('car_auto');
+// db.connect('mongodb://localhost:1234/', (err) => {
+//     if(err) return console.log(err);
+//     //db = client.db('car_auto');
     app.listen(3076, () => {
         console.log('server started on port 3076');
     });
-});
+// });
