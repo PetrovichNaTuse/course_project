@@ -3,7 +3,7 @@ const fs = require('fs');
 const mime = require('mime');
 const express = require('express');
 const app = express();
-const server = require('http').createServer(app);
+const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const bodyParser = require('body-parser');
 const db = require('../db/db');
@@ -20,8 +20,18 @@ app.use(express.static(path.join(__dirname, '../public')))
 
 // отдаём модель склада
 app.get('/truck', (req, res) => {
-    res.sendFile('truck/index.html');
+    res.sendFile(__dirname + 'truck/index.html');
 });
+
+
+// socket
+io.on('connection', (socket) => {
+    socket.on('truck_start', () => {
+        socket.broadcast.emit('truck_start');
+    });
+});
+
+
 
 app.get('/reg', (req, res) => {
     //console.log(req.body);
@@ -268,7 +278,7 @@ app.get('/movebox', (req, res) => {
 db.connect('mongodb://localhost:1234/', (err) => {
     if(err) return console.log(err);
     //db = client.db('car_auto');
-    app.listen(3076, () => {
+    server.listen(3076, () => {
         console.log('server started on port 3076');
     });
 });

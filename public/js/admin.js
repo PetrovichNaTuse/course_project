@@ -1,12 +1,10 @@
-const socket = io('http://localhost:3076');
-console.log(socket);
+const socket = io.connect('http://localhost:3076');
 
-
-document.onclick = async event => {
-    const response = await fetch('/movebox');
-    console.log(response);
+document.body.onclick = event => {
+    socket.emit('truck_start');
+    socket.on('truck_pending', data => alert(data));
+    socket.on('truck_fulfilled', data => alert(data));
 };
-
 
 document.querySelector('.select-menu').onclick = function(event) {
     const targ = event.target;

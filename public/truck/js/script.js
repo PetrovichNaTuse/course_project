@@ -180,7 +180,7 @@ const goAction = (row, column) => {
     action2.play();
 };
 // test
-document.body.onclick = event => goAction(3, 5);
+// document.body.onclick = event => goAction(3, 5);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(W, H);
