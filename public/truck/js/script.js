@@ -123,21 +123,34 @@ const getWarehouseBox = () => {
 
 getWarehouseBox();
 
-let mixer, box;
+let mixer = null, box;
 
 // пока устанавливается фиксированное время, но надо рассчитывать исходя из row and column
-const goAction = (row, column) => {
+const goAction = ({ col, row }) => {
+    // главные параметры которые считаем
+    // debugger;
+    const positionY = (2 * 50) - 55;
+    const positionX = (2 * (145 / 3)) - (145 / 3);
+    const maxTime = 5; // sec
+    const maxDistance = ((12 * (145 / 3)) - (145 / 3)) + ((7 * 50) - 55);
+    const distance = positionX + positionY;
+    const factor = maxTime / maxDistance;
+    const time = Math.abs(distance * factor);
+    console.log(time);
+
     const getBox = () => {
         // temp in global scope
         // const box = new THREE.Mesh(new THREE.BoxBufferGeometry(50, 50, 50), poleMat);
-        box = new THREE.Mesh(new THREE.BoxBufferGeometry(40, 40, 40), poleMat);
+        const box = new THREE.Mesh(new THREE.BoxBufferGeometry(40, 40, 40), poleMat);
+        const groupBox = new THREE.Group();
         box.position.x = 270;
         box.position.y = -144;
         box.position.z = 35;
         box.receiveShadow = true;
         box.castShadow = true;
+        groupBox.add(box);
 
-        return box;
+        return groupBox;
     };
 
     const getAndDletedBox = () => {
@@ -146,27 +159,25 @@ const goAction = (row, column) => {
 
         setTimeout(() => {
             poleGroup.remove(box);
-            // тут проблемка, так как координты группы элементов начинаются с нуля где они были спозиционированы
-            // а координаты элемента на центре настоящх координат
-            box.position.x = -30;
-            box.position.y = 150;
-            box.position.z = -40;
+            box.position.x = -positionX;
+            box.position.y = positionY;
+            box.position.z = -80;
             scene.add(box);
-        }, 1500);
+        }, time * 1000 / 2);
     };
 
     if (mixer && mixer._actions.some(action => action.isRunning())) return;
 
     getAndDletedBox();
 
-    const track = new THREE.NumberKeyframeTrack( '.position[y]', [ 0, 1, 2, 3 ], [0, 300, 300, 0] );
-    const clip = new THREE.AnimationClip('Clip', 3, [track]);
+    const track = new THREE.NumberKeyframeTrack( '.position[y]', [ 0, 1, 2, 3 ], [0, positionY, positionY, 0] );
+    const clip = new THREE.AnimationClip('Clip', time, [track]);
 
-    const track1 = new THREE.NumberKeyframeTrack( '.position[x]', [ 0, 1, 2, 3 ], [0, -300, -300, 0] );
-    const clip1 = new THREE.AnimationClip('Clip1', 3, [track1]);
+    const track1 = new THREE.NumberKeyframeTrack( '.position[x]', [ 0, 1, 2, 3 ], [0, -positionX, -positionX, 0] );
+    const clip1 = new THREE.AnimationClip('Clip1', time, [track1]);
 
     const track2 = new THREE.NumberKeyframeTrack( '.position[z]', [ 1, 1.5, 2 ], [0, -70, 0] );
-    const clip2 = new THREE.AnimationClip('Clip1', 3, [track2]);
+    const clip2 = new THREE.AnimationClip('Clip1', time, [track2]);
 
     mixer = new THREE.AnimationMixer(moveGroup);
     const action = mixer.clipAction(clip);
@@ -178,12 +189,19 @@ const goAction = (row, column) => {
     action.play();
     action1.play();
     action2.play();
+    setInterval(() => {
+        if(mixer && !mixer._actions.some(action => action.isRunning())) mixer = null;
+    }, 20);
 };
 // test
 // document.body.onclick = event => goAction(3, 5);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(W, H);
+const controls = new THREE.OrbitControls(scene, renderer.domElement);
+controls.maxPolarAngle = Math.PI * 0.5;
+controls.minDistance = 100;
+controls.maxDistance = 500;
 container.appendChild(renderer.domElement);
 
 init();
@@ -198,7 +216,7 @@ function animate() {
     render();
 }
 
-const rotationScene = event => {
+/* const rotationScene = event => {
     paramSettings.scene.rotationX += event.movementY * 0.0001;
     paramSettings.scene.rotationY += event.movementX * 0.0001;
 };
@@ -212,7 +230,7 @@ document.addEventListener('mouseup', event => {
     paramSettings.scene.rotationY = 0;
     paramSettings.scene.rotationZ = 0;
     document.removeEventListener('mousemove', rotationScene);
-});
+}); */
 
 function render() {
     scene.position.z += paramSettings.scene.positionX;
@@ -221,7 +239,7 @@ function render() {
     scene.rotation.z += paramSettings.scene.rotationX;
     scene.rotation.y += paramSettings.scene.rotationY;
     scene.rotation.z += paramSettings.scene.rotationZ;
-    
+
     const delta = clock.getDelta();
 
     if ( mixer ) {

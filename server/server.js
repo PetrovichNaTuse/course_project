@@ -26,24 +26,24 @@ app.get('/truck', (req, res) => {
 
 // socket
 io.on('connection', (socket) => {
-    socket.on('truck_start', () => {
-        socket.broadcast.emit('truck_start');
-    });
+    socket.on('truck_start', (data) => socket.broadcast.emit('truck_start', data));
+    socket.on('truck_pending', () => socket.broadcast.emit('truck_pending'));
+    socket.on('truck_fulfilled', () => socket.broadcast.emit('truck_fulfilled', 'Операция выполнена'));
 });
 
 
 
 app.get('/reg', (req, res) => {
-    //console.log(req.body);
     res.render('registration', { title: 'Registration', text_h1: 'Registration' });
 });
 app.get('/reg', (req, res) => {
-    //console.log(req.body);
     res.render('registration', { title: 'Registration', text_h1: 'Registration' });
 });
 
 app.get('/admin', (req, res) => {
-    // db.get().collection('products').deleteMany({});
+    // db.get().collection('admin').deleteMany({});
+    // db.get().collection('admin').insertOne({ login: 'admin', password: '1234' }, console.log);
+    // db.get().collection('admin').findOne({login: req.query.login}, (e, r) => console.log(r));
     db.get().collection('admin').findOne({login: req.query.login}, (err, admin) => {
         if(err) {
             console.log(err);
@@ -77,7 +77,7 @@ app.post('/reg',(req, res) => {
 app.post('/uploadimg', (req, res) => {
     const fileName = req.headers['file-name'];
     const fileMime = mime.getExtension(req.headers['content-type']);
-    
+
     console.log(req.headers)
     let filePath = path.join(__dirname, '../public/img/products')
 
@@ -242,12 +242,9 @@ app.post('/getUserBasket', (req, res) => {
         db.get().collection('products').findOne( {_id: ObjectID(item)}, (err, prod) => {
             if(err) {
                 return reject(new Error('Пятисотая ошибка'));
-                
             }
             return resolve(prod);
-            
-        } );
-        
+        });
     })
 
     Promise
@@ -255,11 +252,9 @@ app.post('/getUserBasket', (req, res) => {
         .then((results) => {
             res.status(200);
             res.send(results);
-            
         })
         .catch((err) => {
             res.sendStatus(500);
-            
         })
 })
 

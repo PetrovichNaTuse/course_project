@@ -1,9 +1,10 @@
 const socket = io.connect('http://localhost:3076');
 
+socket.on('truck_pending', () => console.log('truck_pending'));
+socket.on('truck_fulfilled', console.log);
+
 document.body.onclick = event => {
-    socket.emit('truck_start');
-    socket.on('truck_pending', data => alert(data));
-    socket.on('truck_fulfilled', data => alert(data));
+    socket.emit('truck_start', { col: 8, row: 3 });
 };
 
 document.querySelector('.select-menu').onclick = function(event) {
@@ -34,7 +35,7 @@ document.querySelector('.product-block').addEventListener('click', switchBlock);
 document.forms.addproduct.onsubmit = function(event) {
     event.preventDefault();
     const _that = this;
-    
+
     const xhr = new XMLHttpRequest();
 
     // insert input
