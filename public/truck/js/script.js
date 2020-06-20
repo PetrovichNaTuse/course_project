@@ -128,15 +128,14 @@ let mixer = null, box;
 // пока устанавливается фиксированное время, но надо рассчитывать исходя из row and column
 const goAction = ({ col, row }) => {
     // главные параметры которые считаем
-    // debugger;
-    const positionY = (2 * 50) - 55;
-    const positionX = (2 * (145 / 3)) - (145 / 3);
+    const positionY = (7 * 50) - 55;
+    const positionX = (11 * (145 / 3)) - (145 / 3);
     const maxTime = 5; // sec
     const maxDistance = ((12 * (145 / 3)) - (145 / 3)) + ((7 * 50) - 55);
     const distance = positionX + positionY;
     const factor = maxTime / maxDistance;
-    const time = Math.abs(distance * factor);
-    console.log(time);
+    const time = Math.abs(distance * factor) + 1;
+    const halfTime = time / 2;
 
     const getBox = () => {
         // temp in global scope
@@ -163,21 +162,21 @@ const goAction = ({ col, row }) => {
             box.position.y = positionY;
             box.position.z = -80;
             scene.add(box);
-        }, time * 1000 / 2);
+        }, halfTime * 1000);
     };
 
     if (mixer && mixer._actions.some(action => action.isRunning())) return;
 
     getAndDletedBox();
 
-    const track = new THREE.NumberKeyframeTrack( '.position[y]', [ 0, 1, 2, 3 ], [0, positionY, positionY, 0] );
+    const track = new THREE.NumberKeyframeTrack('.position[y]', [0, halfTime - .5, halfTime + .5, time], [0, positionY, positionY, 0]);
     const clip = new THREE.AnimationClip('Clip', time, [track]);
 
-    const track1 = new THREE.NumberKeyframeTrack( '.position[x]', [ 0, 1, 2, 3 ], [0, -positionX, -positionX, 0] );
+    const track1 = new THREE.NumberKeyframeTrack('.position[x]', [0, halfTime - .5, halfTime + .5, time], [0, -positionX, -positionX, 0]);
     const clip1 = new THREE.AnimationClip('Clip1', time, [track1]);
 
-    const track2 = new THREE.NumberKeyframeTrack( '.position[z]', [ 1, 1.5, 2 ], [0, -70, 0] );
-    const clip2 = new THREE.AnimationClip('Clip1', time, [track2]);
+    const track2 = new THREE.NumberKeyframeTrack('.position[z]', [0, halfTime - .5, halfTime, halfTime + 0.5, time], [0, 0, -80, 0, 0]);
+    const clip2 = new THREE.AnimationClip('Clip2', time, [track2]);
 
     mixer = new THREE.AnimationMixer(moveGroup);
     const action = mixer.clipAction(clip);
@@ -189,9 +188,10 @@ const goAction = ({ col, row }) => {
     action.play();
     action1.play();
     action2.play();
-    setInterval(() => {
-        if(mixer && !mixer._actions.some(action => action.isRunning())) mixer = null;
-    }, 20);
+
+    // setInterval(() => {
+    //     if(mixer && !mixer._actions.some(action => action.isRunning())) mixer = null;
+    // }, 20);
 };
 // test
 // document.body.onclick = event => goAction(3, 5);
