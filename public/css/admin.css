@@ -119,3 +119,20 @@ textarea {
 .product-block__list {
     padding-top: 30px;
 }
+
+/* Truck block */
+.truck-block {
+
+}
+.truck-block .truck-block_row {
+    display: flex;
+    border: 1px solid black;
+    height: 100px;
+}
+.truck-block .truck-block_col {
+    flex: 1 0 10px;
+    border: 1px solid black;
+}
+.truck-block .block_used {
+    background-color: red;
+}

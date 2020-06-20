@@ -28,7 +28,7 @@ app.get('/truck', (req, res) => {
 io.on('connection', (socket) => {
     socket.on('truck_start', (data) => socket.broadcast.emit('truck_start', data));
     socket.on('truck_pending', () => socket.broadcast.emit('truck_pending'));
-    socket.on('truck_fulfilled', () => socket.broadcast.emit('truck_fulfilled', 'Операция выполнена'));
+    socket.on('truck_fulfilled', () => socket.broadcast.emit('truck_fulfilled', 'truck_fulfilled'));
 });
 
 

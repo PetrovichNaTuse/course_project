@@ -128,10 +128,10 @@ let mixer = null, box;
 // пока устанавливается фиксированное время, но надо рассчитывать исходя из row and column
 const goAction = ({ col, row }) => {
     // главные параметры которые считаем
-    const positionY = (7 * 50) - 55;
-    const positionX = (11 * (145 / 3)) - (145 / 3);
+    const positionY = (row * 50) - 55;
+    const positionX = (col * (145 / 3)) - ((145 / 3) - 5);
     const maxTime = 5; // sec
-    const maxDistance = ((12 * (145 / 3)) - (145 / 3)) + ((7 * 50) - 55);
+    const maxDistance = ((12 * (145 / 3)) - ((145 / 3) - 5)) + ((7 * 50) - 55);
     const distance = positionX + positionY;
     const factor = maxTime / maxDistance;
     const time = Math.abs(distance * factor) + 1;

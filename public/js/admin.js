@@ -3,9 +3,58 @@ const socket = io.connect('http://localhost:3076');
 socket.on('truck_pending', () => console.log('truck_pending'));
 socket.on('truck_fulfilled', console.log);
 
-document.body.onclick = event => {
-    socket.emit('truck_start', { col: 8, row: 3 });
-};
+// document.body.onclick = event => {
+//     socket.emit('truck_start', { col: 6, row: 7 });
+// };
+
+
+// Truck
+const truckCols = Array(7).fill(false);
+const truckCeils =  truckCols.map(() => Array(12).fill(false));
+const truckBlock = document.querySelector('.truck-block');
+const truckBlockH1 = document.createElement('h1');
+truckBlockH1.innerText = 'Склад';
+truckBlock.appendChild(truckBlockH1);
+
+truckCeils.forEach((row, i) => {
+    const r = document.createElement('div');
+    r.classList.add('truck-block_row');
+    truckBlock.appendChild(r);
+    row.forEach((col, j) => {
+        const c = document.createElement('div');
+        c.classList.add('truck-block_col');
+        c.setAttribute('row', 7 - i);
+        c.setAttribute('col', 12 - j);
+
+        r.addEventListener('click', (event) => {
+            const target = event.target;
+            const col = +target.getAttribute('col');
+            const row = +target.getAttribute('row');
+
+            // Срабатывает 12 событий на одно нажатие, надо пофиксить
+            // if (truckCeils[row - 1][col - 1]) return alert('Ячейка уже занята');
+
+            socket.emit('truck_start', { col, row, target })
+
+
+            // TEMP
+            const factor = 0.006012024048096192;
+            const positionY = ((row + 1) * 50) - 55;
+            const positionX = ((col + 1) * (145 / 3)) - ((145 / 3) - 5);
+            const distance = positionX + positionY;
+            const time = Math.abs(distance * factor) + 1;
+            setTimeout(() => {
+                target.classList.add('block_used')
+            }, time * 900);
+
+
+            truckCeils[row - 1][col - 1] = true;
+        });
+
+        r.appendChild(c);
+    });
+});
+
 
 document.querySelector('.select-menu').onclick = function(event) {
     const targ = event.target;

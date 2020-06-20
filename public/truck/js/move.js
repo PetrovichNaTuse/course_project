@@ -10,8 +10,8 @@ socket.on('truck_start', (data) => {
 
 interval = setInterval(() => {
     if (!animation_running() && trigger) {
-        console.log('truck_fulfilled');
         socket.emit('truck_fulfilled')
         trigger = false;
+        // target = null;
     }
 }, 20);
