@@ -78,7 +78,6 @@ app.post('/uploadimg', (req, res) => {
     const fileName = req.headers['file-name'];
     const fileMime = mime.getExtension(req.headers['content-type']);
 
-    console.log(req.headers)
     let filePath = path.join(__dirname, '../public/img/products')
 
     const listDir = fs.readdirSync(filePath);
@@ -265,10 +264,6 @@ app.post('/userBasket', (req, res) => {
     res.status(200);
     res.end('ok');
 })
-
-// start amination
-app.get('/movebox', (req, res) => {
-});
 
 db.connect('mongodb://localhost:1234/', (err) => {
     if(err) return console.log(err);
