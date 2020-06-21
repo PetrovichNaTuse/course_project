@@ -26,9 +26,10 @@ app.get('/truck', (req, res) => {
 
 // socket
 io.on('connection', (socket) => {
-    socket.on('truck_start', (data) => socket.broadcast.emit('truck_start', data));
+    socket.on('truck_start', data => socket.broadcast.emit('truck_start', data));
     socket.on('truck_pending', () => socket.broadcast.emit('truck_pending'));
-    socket.on('truck_fulfilled', () => socket.broadcast.emit('truck_fulfilled', 'truck_fulfilled'));
+    socket.on('truck_fulfilled', data => socket.broadcast.emit('truck_fulfilled', data));
+    socket.on('truck_takeoff', data => socket.broadcast.emit('truck_takeoff', data));
 });
 
 

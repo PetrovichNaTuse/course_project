@@ -126,7 +126,7 @@ getWarehouseBox();
 let mixer = null, box;
 
 // пока устанавливается фиксированное время, но надо рассчитывать исходя из row and column
-const goAction = ({ col, row }) => {
+const goAction = ({ col, row }, takeoff) => {
     // главные параметры которые считаем
     const positionY = (row * 50) - 55;
     const positionX = (col * (145 / 3)) - ((145 / 3) - 5);
@@ -142,6 +142,8 @@ const goAction = ({ col, row }) => {
         // const box = new THREE.Mesh(new THREE.BoxBufferGeometry(50, 50, 50), poleMat);
         const box = new THREE.Mesh(new THREE.BoxBufferGeometry(40, 40, 40), poleMat);
         const groupBox = new THREE.Group();
+        groupBox.name = col + '-' + row;
+
         box.position.x = 270;
         box.position.y = -144;
         box.position.z = 35;
@@ -153,21 +155,33 @@ const goAction = ({ col, row }) => {
     };
 
     const getAndDletedBox = () => {
-        const box = getBox();
-        poleGroup.add(box);
+        const box = takeoff
+            ? scene.getChildByName(col + '-' + row)
+            : getBox();
+        !takeoff && poleGroup.add(box);
+        takeoff && setTimeout(() => {
+            box.position.x = 0;
+            box.position.y = 0;
+            box.position.z = 0;
+            poleGroup.add(box);
+        }, halfTime * 1000);
+
+        const forvard = () => {
+
+        };
 
         setTimeout(() => {
             poleGroup.remove(box);
             box.position.x = -positionX;
             box.position.y = positionY;
             box.position.z = -80;
-            scene.add(box);
-        }, halfTime * 1000);
+            !takeoff && scene.add(box);
+        }, !takeoff ? halfTime * 1000 : time * 1000 + 3000);
     };
+    
+    getAndDletedBox();
 
     if (mixer && mixer._actions.some(action => action.isRunning())) return;
-
-    getAndDletedBox();
 
     const track = new THREE.NumberKeyframeTrack('.position[y]', [0, halfTime - .5, halfTime + .5, time], [0, positionY, positionY, 0]);
     const clip = new THREE.AnimationClip('Clip', time, [track]);
